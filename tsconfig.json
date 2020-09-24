@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    // (Whatever language config options we want)
+    "strict": true,
+    "lib": [
+      "ES2017"
+    ],
+    "types": [],
+    "baseUrl": ".",
+    // Make the editor understand that bazel_typescript_sample refers to the workspace root.
+    // Bazel will do this regardless, this is only for the editor.
+    "paths": {
+      "bazel_typescript_closure_sample/*": [
+        "./*"
+      ]
+    },
+  },
+  "bazelOptions": {
+    // Enable Tsickle to generate closure compatable code
+    "tsickleGenerateExterns": true,
+    "tsickle": true,
+  }
+}
