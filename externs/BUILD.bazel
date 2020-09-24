@@ -1,0 +1,18 @@
+load("//externs:defs.bzl", "closure_js_extern_library")
+
+closure_js_extern_library(
+    name = "react",
+    srcs = [
+        "react.ext.js",
+        "react-dom.ext.js",
+    ],
+    supress = ["unsupportedBoundedGenericTypes"],
+    visibility = ["//visibility:public"],
+    deps = [":prop-types.ext"],
+)
+
+closure_js_extern_library(
+    name = "prop-types.ext",
+    srcs = ["prop-types.ext.js"],
+    visibility = ["//visibility:public"],
+)

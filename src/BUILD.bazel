@@ -1,0 +1,135 @@
+load("@io_bazel_rules_closure//closure:defs.bzl", "closure_js_binary", "closure_js_library")
+load("@npm//@bazel/typescript:index.bzl", "ts_devserver", "ts_library")
+load("@npm//http-server:index.bzl", "http_server")
+load("@io_bazel_rules_sass//:defs.bzl", "sass_binary")
+load("index.bzl",  "index_html")
+
+###################
+# Prod targets
+###################
+
+# Minified js bundle
+closure_js_binary(
+    name = "bundle",
+    entry_points = ["src/index.js"],
+    language = "ECMASCRIPT6_STRICT",
+    deps = [":main_closure_lib"],
+)
+
+closure_js_library(
+    name = "main_closure_lib",
+    srcs = [":main_js"],
+    suppress = ["reportUnknownTypes"], # Shouldn't the externs be enough for us to know about the types?
+    deps = [
+        "//externs:react",
+        "//vendor:tslib", # Should probably make a wrapper that automatically includes this, since tsickle adds it to every file
+    ],
+)
+
+# Minified external dependencies
+# Only uses WHITESPACE optimizations
+closure_js_binary(
+    name = "vendor_prod",
+    compilation_level = "WHITESPACE_ONLY",
+    deps = [
+        "//vendor:react.min",
+        "//vendor:react-dom.min",
+    ],
+)
+
+
+# Generates an index.html file from the template that injects the prod vendor/bundle scripts
+index_html(
+  name = "index_prod",
+  path = "index.html",
+  vendorPath = "./vendor_prod.js",
+  bundlePath= "./bundle.js",
+)
+
+# Serves production outputs
+http_server(
+  name = "server_prod",
+  data = [
+    ":index_prod",
+    ":bundle",
+    ":vendor_prod",
+    ":styles",
+  ],
+  args = ["src"],
+)
+
+ts_library(
+    name = "main_ts_lib",
+    srcs = glob([
+        "*.ts",
+        "*.tsx",
+    ]),
+    tsickle_typed = True,
+    deps = [
+        "@npm//@types/react",
+        "@npm//tsickle",
+    ],
+)
+
+filegroup(
+    name = "main_js",
+    srcs = [":main_ts_lib"],
+    output_group = "es5_sources", # I initially thought using es6_sources here would be easier, but that turned out to not be true
+)
+
+###################
+# Dev targets
+###################
+
+index_html(
+  name = "index_dev",
+  path = "dev/index.html", # It would be nice if this was just index.html but I don't know a clean way for it not to clash with the prod version
+  vendorPath = "./vendor_dev.js",
+  bundlePath= "/src/bin.js",
+)
+
+ts_library(
+    name = "dev_ts_lib",
+    srcs = glob([
+        "*.ts",
+        "*.tsx",
+    ]),
+    tsconfig = "//:tsconfig_dev.json",
+    tsickle_typed = False,
+    deps = [
+        "@npm//@types/react",
+    ],
+)
+
+ts_devserver(
+    name = "server_dev",
+    entry_module = "bazel_typescript_closure_sample/src/index",
+    serving_path = "/src/bin.js",
+    port = 8080,
+    static_files = [
+        ":index_dev",
+        "vendor_dev.js",
+        ":styles",
+    ],
+    deps = [
+        ":dev_ts_lib",
+    ],
+)
+
+closure_js_binary(
+    name = "vendor_dev",
+    compilation_level = "WHITESPACE_ONLY",
+    deps = [
+        "//vendor:react",
+        "//vendor:react-dom",
+    ],
+)
+
+###################
+# Shared targets
+###################
+
+sass_binary(
+    name = "styles",
+    src = "styles.scss",
+)

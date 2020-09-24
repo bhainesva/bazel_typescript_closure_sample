@@ -1,0 +1,31 @@
+load("//vendor:defs.bzl", "closure_js_thirdparty_library")
+
+closure_js_thirdparty_library(
+    name = "tslib",
+    srcs = ["tslib.js"],
+    visibility = ["//visibility:public"],
+)
+
+closure_js_thirdparty_library(
+    name = "react",
+    srcs = ["react.inc.js"],
+    visibility = ["//visibility:public"],
+)
+
+closure_js_thirdparty_library(
+    name = "react.min",
+    srcs = ["react.min.inc.js"],
+    visibility = ["//visibility:public"],
+)
+
+closure_js_thirdparty_library(
+    name = "react-dom",
+    srcs = ["react-dom.inc.js"],
+    visibility = ["//visibility:public"],
+)
+
+closure_js_thirdparty_library(
+    name = "react-dom.min",
+    srcs = ["react-dom.min.inc.js"],
+    visibility = ["//visibility:public"],
+)

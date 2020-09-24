@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.json",
+  "bazelOptions": {
+    // In dev mode we don't pass things all the way through the compiler, so adding the closure
+    // stuff will just break things
+    "tsickleGenerateExterns": false,
+    "tsickle": false,
+    "googmodule": false
+  }
+}

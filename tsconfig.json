@@ -3,8 +3,11 @@
     // (Whatever language config options we want)
     "strict": true,
     "lib": [
-      "ES2017"
+      "ES2017",
+      "dom"
     ],
+    "importHelpers": true, // tsickle automatically adds the tslib import to everything, so we might as well use it
+    "jsx": "react", // enable jsx syntax
     "types": [],
     "baseUrl": ".",
     // Make the editor understand that bazel_typescript_sample refers to the workspace root.
@@ -19,5 +22,6 @@
     // Enable Tsickle to generate closure compatable code
     "tsickleGenerateExterns": true,
     "tsickle": true,
+    "googmodule": true,
   }
 }
