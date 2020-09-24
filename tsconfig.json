@@ -3,7 +3,8 @@
     // (Whatever language config options we want)
     "strict": true,
     "lib": [
-      "ES2017"
+      "ES2017",
+      "dom"
     ],
     "types": [],
     "baseUrl": ".",

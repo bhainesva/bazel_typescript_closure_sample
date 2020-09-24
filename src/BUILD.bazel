@@ -1,0 +1,26 @@
+load("@io_bazel_rules_closure//closure:defs.bzl", "closure_js_binary", "closure_js_library")
+load("@npm//@bazel/typescript:index.bzl", "ts_library")
+
+closure_js_binary(
+  name = "bin",
+  deps = [":main_closure_lib"],
+)
+
+closure_js_library(
+  name = "main_closure_lib",
+  srcs = [":main_js"],
+  data = ["@npm//tslib"]
+)
+
+ts_library(
+  name = "main_ts_lib",
+  srcs = glob(["*.ts"]),
+  deps = ["@npm//tsickle"],
+  tsickle_typed = True,
+)
+
+filegroup(
+    name = "main_js",
+    srcs = [":main_ts_lib"],
+    output_group = "es6_sources",
+)

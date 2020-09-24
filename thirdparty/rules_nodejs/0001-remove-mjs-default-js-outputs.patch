@@ -1,0 +1,48 @@
+From ff2937a57d15b43f1282972ae928299b85d215cb Mon Sep 17 00:00:00 2001
+From: bhaines <bhaines@yext.com>
+Date: Thu, 24 Sep 2020 03:06:59 -0400
+Subject: [PATCH] remove mjs, default js outputs
+
+---
+ internal/common/compilation.bzl       | 4 ++--
+ internal/tsc_wrapped/compiler_host.ts | 2 --
+ 2 files changed, 2 insertions(+), 4 deletions(-)
+
+diff --git a/internal/common/compilation.bzl b/internal/common/compilation.bzl
+index 2947e81..3314f0d 100644
+--- a/internal/common/compilation.bzl
++++ b/internal/common/compilation.bzl
+@@ -154,7 +154,7 @@ def _outputs(ctx, label, srcs_files = []):
+             if basename.endswith(ext):
+                 basename = basename[:-len(ext)]
+                 break
+-        closure_js_file = ctx.actions.declare_file(basename + ".mjs")
++        closure_js_file = ctx.actions.declare_file(basename + ".js")
+         closure_js_files.append(closure_js_file)
+ 
+         # Temporary until all imports of ngfactory/ngsummary files are removed
+@@ -362,7 +362,7 @@ def compile_ts(
+         devmode_manifest = ctx.actions.declare_file(ctx.label.name + ".es5.MF")
+         tsconfig_json_es5 = ctx.actions.declare_file(ctx.label.name + "_es5_tsconfig.json")
+         outputs = (
+-            transpiled_devmode_js + gen_declarations + [devmode_manifest]
++            gen_declarations + [devmode_manifest]
+         )
+         tsconfig_es5 = tsc_wrapped_tsconfig(
+             ctx,
+diff --git a/internal/tsc_wrapped/compiler_host.ts b/internal/tsc_wrapped/compiler_host.ts
+index dba7de3..185b068 100644
+--- a/internal/tsc_wrapped/compiler_host.ts
++++ b/internal/tsc_wrapped/compiler_host.ts
+@@ -529,8 +529,6 @@ export class CompilerHost implements ts.CompilerHost, tsickle.TsickleHost {
+         // i18n paths are required to end with __locale.js so we put
+         // the .closure segment before the __locale
+         fileName = fileName.replace(/(__[^\.]+)?\.js$/, '.closure$1.js');
+-      } else {
+-        fileName = fileName.replace(/\.js$/, '.mjs');
+       }
+     }
+ 
+-- 
+2.28.0
+

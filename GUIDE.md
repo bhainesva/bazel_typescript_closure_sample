@@ -35,28 +35,3 @@ $ bazel run @nodejs//:yarn -- add lodash @types/lodash express @types/express
 Create [`tsconfig.json`](tsconfig.json). See that file for more information.
 
 Expose `tsconfig.json` in [`BUILD.bazel`](BUILD). See that file for more information.
-
-## Library
-
-Finally, code can be written. First, there's a small dummy library intended to be consumed either
-in a node app _or_ in the browser as part of a client bundle.
-
-See:
-- [`src/lib/add.ts`](src/lib/add.ts) for the main library implementation
-- [`src/lib/add.spec.ts`](src/lib/add.spec.ts) for a test suite of the library
-- [`src/lib/BUILD`](src/lib/BUILD) for the library and test rules
-
-## Application
-
-Next, an Express server to expose the above library as an endpoint.
-
-See:
-- [`src/app/main.ts`](src/app/main.ts) for the entry point implementation
-- [`src/app/BUILD`](src/app/BUILD) for the library and binary rules
-
-## Client
-
-Finally, the same library packaged for browser consumption.
-
-See:
-- [`src/client/BUILD`](src/client/BUILD) for the client library rule
