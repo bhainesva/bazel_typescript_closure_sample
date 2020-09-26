@@ -1,10 +1,14 @@
 load("@io_bazel_rules_closure//closure:defs.bzl", "closure_js_binary", "closure_js_library")
+load("@npm//http-server:index.bzl", "http_server")
 load("@build_bazel_rules_nodejs//packages/typescript:index.bzl", "ts_library")
 # load("@npm//@bazel/typescript:index.bzl", "ts_library")
 
 closure_js_binary(
   name = "bin",
   deps = [":main_closure_lib"],
+  entry_points = [
+    "src/main.js",
+  ],
 )
 
 closure_js_library(
@@ -24,4 +28,13 @@ filegroup(
     name = "main_js",
     srcs = [":main_ts_lib"],
     output_group = "es6_sources",
+)
+
+http_server(
+  name = "server",
+  data = [
+    "index.html",
+    "bin.js",
+  ],
+  args = ["."],
 )

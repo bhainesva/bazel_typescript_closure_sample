@@ -16,6 +16,10 @@
       ]
     },
   },
+  "files": [
+    "src/main.ts",
+    "src/lib.ts"
+  ],
   "bazelOptions": {
     // Enable Tsickle to generate closure compatable code
     "tsickleGenerateExterns": true,

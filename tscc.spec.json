@@ -1,0 +1,8 @@
+{
+  "modules": {
+      "out": "src/main.ts"
+  },
+  "debug": {
+    "persistArtifacts": true
+  }
+}

@@ -1,4 +1,7 @@
 import { foo } from './lib.js';
 
-console.log("hello");
-console.log(foo());
+const testGetter = () => {
+  return foo(null);
+}
+
+console.log(testGetter);
