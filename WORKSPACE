@@ -19,7 +19,6 @@ git_repository(
     name = "build_bazel_rules_nodejs",
     remote = "https://github.com/bazelbuild/rules_nodejs.git",
     commit = "9fd49927aa9565e606a81ae84d3847c1d0151cfa",
-    patch_args = ["-p1"],
     patches = ["//thirdparty/rules_nodejs:0001-no-externs.patch"],
     shallow_since = "1599756951 -0700",
 )
@@ -32,7 +31,7 @@ git_repository(
         "@build_bazel_rules_nodejs//:rules_typescript_pr_496.patch",
         "@build_bazel_rules_nodejs//:rules_typescript_pr_499.patch",
         "@build_bazel_rules_nodejs//:rules_typescript_pr_508.patch",
-        "//thirdparty/rules_nodejs:0001-remove-mjs-default-js-outputs.patch",
+        "//thirdparty/rules_typescript:0001-remove-mjs-default-js-outputs.patch",
     ],
     remote = "http://github.com/bazelbuild/rules_typescript.git",
     shallow_since = "1582757372 -0800",
@@ -65,14 +64,12 @@ http_archive(
     name = "io_bazel_rules_closure",
     sha256 = "7d206c2383811f378a5ef03f4aacbcf5f47fd8650f6abbc3fa89f3a27dd8b176",
     strip_prefix = "rules_closure-0.10.0",
-    patches = ["//thirdparty/rules_nodejs:0001-gen-module-resolution.patch"],
-    patch_args = ["-p1"],
+    patches = ["//thirdparty/rules_closure:0001-gen-module-resolution.patch"],
     urls = [
         "https://mirror.bazel.build/github.com/bazelbuild/rules_closure/archive/0.10.0.tar.gz",
         "https://github.com/bazelbuild/rules_closure/archive/0.10.0.tar.gz",
     ],
 )
-
 load("@io_bazel_rules_closure//closure:repositories.bzl", "rules_closure_dependencies", "rules_closure_toolchains")
 rules_closure_dependencies()
 rules_closure_toolchains()

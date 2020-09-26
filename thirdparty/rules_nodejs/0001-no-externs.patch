@@ -7,10 +7,10 @@ Subject: [PATCH] no externs
  packages/typescript/internal/build_defs.bzl | 8 +-------
  1 file changed, 1 insertion(+), 7 deletions(-)
 
-diff --git a/packages/typescript/internal/build_defs.bzl b/packages/typescript/internal/build_defs.bzl
+diff --git packages/typescript/internal/build_defs.bzl packages/typescript/internal/build_defs.bzl
 index 4be4a831..45b0df15 100644
---- a/packages/typescript/internal/build_defs.bzl
-+++ b/packages/typescript/internal/build_defs.bzl
+--- packages/typescript/internal/build_defs.bzl
++++ packages/typescript/internal/build_defs.bzl
 @@ -112,17 +112,11 @@ def _compile_action(ctx, inputs, outputs, tsconfig_file, node_opts, description
      action_inputs = inputs
      action_outputs = []
@@ -22,7 +22,7 @@ index 4be4a831..45b0df15 100644
              ctx.actions.write(output, content = "")
          else:
              action_outputs.append(output)
- 
+
 -    # TODO(plf): For now we mock creation of files other than {name}.js.
 -    for externs_file in externs_files:
 -        ctx.actions.write(output = externs_file, content = "")
@@ -30,6 +30,6 @@ index 4be4a831..45b0df15 100644
      # A ts_library that has only .d.ts inputs will have no outputs,
      # therefore there are no actions to execute
      if not action_outputs:
--- 
+--
 2.28.0
 

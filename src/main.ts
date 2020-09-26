@@ -1,3 +1,4 @@
-import { foo } from './lib';
+import { foo } from './lib.js';
 
+console.log("hello");
 console.log(foo());
