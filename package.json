@@ -14,6 +14,8 @@
     },
     "scripts": {
         "build": "bazel build //...",
-        "test": "bazel test //..."
+        "test": "bazel test //...",
+        "serve": "ibazel run //src:server",
+        "serve2": "ibazel run //src:devserver"
     }
 }

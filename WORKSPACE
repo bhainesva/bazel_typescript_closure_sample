@@ -23,31 +23,9 @@ git_repository(
     shallow_since = "1599756951 -0700",
 )
 
-git_repository(
-    name = "build_bazel_rules_typescript",
-    commit = "10a5a86885f95ab788fd841ade47b6a16e0c13d6",
-    patches = [
-        "@build_bazel_rules_nodejs//:rules_typescript_pr_494.patch",
-        "@build_bazel_rules_nodejs//:rules_typescript_pr_496.patch",
-        "@build_bazel_rules_nodejs//:rules_typescript_pr_499.patch",
-        "@build_bazel_rules_nodejs//:rules_typescript_pr_508.patch",
-        "//thirdparty/rules_typescript:0001-remove-mjs-default-js-outputs.patch",
-    ],
-    remote = "http://github.com/bazelbuild/rules_typescript.git",
-    shallow_since = "1582757372 -0800",
-)
-
 load("@build_bazel_rules_nodejs//:package.bzl", "rules_nodejs_dev_dependencies")
 
 rules_nodejs_dev_dependencies()
-
-load("@build_bazel_rules_typescript//:package.bzl", "rules_typescript_dev_dependencies")
-
-rules_typescript_dev_dependencies()
-
-load("@io_bazel_rules_go//go:deps.bzl", "go_register_toolchains", "go_rules_dependencies")
-go_rules_dependencies()
-go_register_toolchains()
 
 # The npm_install rule runs yarn anytime the package.json or package-lock.json file changes.
 # It also extracts any Bazel rules distributed in an npm package.

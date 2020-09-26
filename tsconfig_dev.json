@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "lib": [
+      "ES2017",
+      "dom"
+    ]
+  },
+  "paths": {
+    "bazel_typescript_closure_sample/*": ["*"]
+  },
+  "bazelOptions": {
+    "tsickleGenerateExterns": false,
+    "tsickle": false,
+    "googmodule": false
+  }
+}
