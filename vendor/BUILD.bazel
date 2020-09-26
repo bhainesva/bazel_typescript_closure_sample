@@ -1,0 +1,14 @@
+load("@io_bazel_rules_closure//closure:defs.bzl",  "closure_js_binary")
+load("//vendor:defs.bzl", "closure_js_thirdparty_library")
+
+closure_js_thirdparty_library(
+    name = "tslib",
+    srcs = ["tslib.js"],
+    visibility = ["//visibility:public"],
+)
+
+closure_js_binary(
+    name = "bin",
+    deps = [":tslib"],
+    entry_points = ["vendor/tslib.js"],
+)

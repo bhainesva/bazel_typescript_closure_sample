@@ -5,12 +5,13 @@ load("@build_bazel_rules_nodejs//packages/typescript:index.bzl", "ts_library")
 closure_js_binary(
   name = "bin",
   deps = [":main_closure_lib"],
+  entry_points = ["src/main.js"]
 )
 
 closure_js_library(
   name = "main_closure_lib",
   srcs = [":main_js"],
-  data = ["@npm//tslib"]
+  deps = ["//vendor:tslib"],
 )
 
 ts_library(
