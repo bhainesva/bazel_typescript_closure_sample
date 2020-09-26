@@ -20,5 +20,6 @@
     // Enable Tsickle to generate closure compatable code
     "tsickleGenerateExterns": true,
     "tsickle": true,
+    "googmodule": true,
   }
 }
