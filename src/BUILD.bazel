@@ -1,5 +1,6 @@
 load("@io_bazel_rules_closure//closure:defs.bzl", "closure_js_binary", "closure_js_library")
-load("@npm//@bazel/typescript:index.bzl", "ts_library")
+load("@build_bazel_rules_nodejs//packages/typescript:index.bzl", "ts_library")
+# load("@npm//@bazel/typescript:index.bzl", "ts_library")
 
 closure_js_binary(
   name = "bin",

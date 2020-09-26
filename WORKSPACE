@@ -28,6 +28,14 @@ load("@build_bazel_rules_nodejs//:package.bzl", "rules_nodejs_dev_dependencies")
 
 rules_nodejs_dev_dependencies()
 
+load("@build_bazel_rules_typescript//:package.bzl", "rules_typescript_dev_dependencies")
+
+rules_typescript_dev_dependencies()
+
+load("@io_bazel_rules_go//go:deps.bzl", "go_register_toolchains", "go_rules_dependencies")
+go_rules_dependencies()
+go_register_toolchains()
+
 # The npm_install rule runs yarn anytime the package.json or package-lock.json file changes.
 # It also extracts any Bazel rules distributed in an npm package.
 load("@build_bazel_rules_nodejs//:index.bzl", "npm_install")
@@ -46,14 +54,6 @@ http_archive(
     patch_args = ["-p1"],
     urls = ["https://github.com/bazelbuild/rules_typescript/archive/master.zip"],
 )
-
-load("@build_bazel_rules_typescript//:package.bzl", "rules_typescript_dev_dependencies")
-
-rules_typescript_dev_dependencies()
-
-load("@build_bazel_rules_typescript//internal:ts_repositories.bzl", "ts_setup_dev_workspace")
-
-ts_setup_dev_workspace()
 
 # Closure Compiler
 http_archive(
