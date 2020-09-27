@@ -1,5 +1,5 @@
-import { init } from './init';
-import { foo } from './lib';
+import { init } from 'bazel_typescript_closure_sample/src/init';
+import { foo } from 'bazel_typescript_closure_sample/src/lib';
 
 const testGetter = () => {
   return foo(null);
@@ -15,7 +15,7 @@ function OnReady(cb: () => void) {
 }
 
 OnReady(() => {
-  console.log("hullo");
+  console.log("hello world");
   console.log(testGetter);
   init();
 });
