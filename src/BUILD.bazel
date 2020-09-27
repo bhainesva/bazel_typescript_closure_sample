@@ -2,30 +2,59 @@ load("@io_bazel_rules_closure//closure:defs.bzl", "closure_js_binary", "closure_
 load("@npm//@bazel/typescript:index.bzl", "ts_library", "ts_devserver")
 load("@npm//http-server:index.bzl", "http_server")
 
+# Prod outputs
 closure_js_binary(
   name = "bin",
-  deps = [":main_closure_lib"],
+  entry_points = ["src/main.js"],
   language = "ECMASCRIPT6_STRICT",
-  entry_points = ["src/main.js"]
+  deps = [":main_closure_lib"],
 )
 
 closure_js_library(
   name = "main_closure_lib",
   srcs = [":main_js"],
-  deps = ["//vendor:tslib"],
+  suppress = ["reportUnknownTypes"],
+  deps = [
+    "//vendor:tslib",
+    "//externs:react",
+  ],
 )
 
 ts_library(
   name = "main_ts_lib",
-  srcs = glob(["*.ts"]),
-  deps = ["@npm//tsickle"],
-  tsickle_typed = False,
+  srcs = glob(["*.ts", "*.tsx"]),
+  deps = [
+    "@npm//tsickle",
+    "@npm//@types/react",
+    "@npm//@types/react-dom",
+  ],
+  tsickle_typed = True,
 )
 
+filegroup(
+    name = "main_js",
+    srcs = [":main_ts_lib"],
+    output_group = "es5_sources",
+)
+
+http_server(
+  name = "server",
+  data = [
+    "index.html",
+    "bin.js",
+    "prod_vendor.js",
+  ],
+  args = ["."],
+)
+
+# Dev Outputs
 ts_library(
   name = "dev_ts_lib",
-  srcs = glob(["*.ts"]),
-  deps = ["@npm//tsickle"],
+  srcs = glob(["*.ts", "*.tsx"]),
+  deps = [
+    "@npm//tsickle",
+    "@npm//@types/react",
+  ],
   tsconfig = "//:tsconfig_dev.json",
   tsickle_typed = False,
 )
@@ -36,25 +65,29 @@ filegroup(
     output_group = "es5_sources",
 )
 
-filegroup(
-    name = "main_js",
-    srcs = [":main_ts_lib"],
-    output_group = "es5_sources",
-)
-
 ts_devserver(
   name = "devserver",
   deps = [":dev_ts_lib"],
   serving_path = "/src/bin.js",
   entry_module = "bazel_typescript_closure_sample/src/main",
-  static_files = ["index.html"],
+  static_files = ["index.html", "vendor.js"],
 )
 
-http_server(
-  name = "server",
-  data = [
-    "index.html",
-    "bin.js",
+# Shared outputs
+closure_js_binary(
+  name = "vendor",
+  compilation_level = "WHITESPACE_ONLY",
+  deps = [
+    "//vendor:react",
+    "//vendor:react-dom",
   ],
-  args = ["."],
+)
+
+closure_js_binary(
+  name = "prod_vendor",
+  compilation_level = "WHITESPACE_ONLY",
+  deps = [
+    "//vendor:react.min",
+    "//vendor:react-dom.min",
+  ],
 )

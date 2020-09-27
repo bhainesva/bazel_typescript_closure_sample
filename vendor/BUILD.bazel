@@ -7,8 +7,26 @@ closure_js_thirdparty_library(
     visibility = ["//visibility:public"],
 )
 
-closure_js_binary(
-    name = "bin",
-    deps = [":tslib"],
-    entry_points = ["vendor/tslib.js"],
+closure_js_thirdparty_library(
+    name = "react",
+    srcs = ["react.inc.js"],
+    visibility = ["//visibility:public"],
+)
+
+closure_js_thirdparty_library(
+    name = "react.min",
+    srcs = ["react.min.inc.js"],
+    visibility = ["//visibility:public"],
+)
+
+closure_js_thirdparty_library(
+    name = "react-dom",
+    srcs = ["react-dom.inc.js"],
+    visibility = ["//visibility:public"],
+)
+
+closure_js_thirdparty_library(
+    name = "react-dom.min",
+    srcs = ["react-dom.min.inc.js"],
+    visibility = ["//visibility:public"],
 )

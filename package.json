@@ -17,5 +17,11 @@
         "test": "bazel test //...",
         "serve": "ibazel run //src:server",
         "serve2": "ibazel run //src:devserver"
+    },
+    "dependencies": {
+        "@types/react": "^16.9.49",
+        "@types/react-dom": "^16.9.8",
+        "react": "^16.13.1",
+        "react-dom": "^16.13.1"
     }
 }

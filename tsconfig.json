@@ -6,6 +6,8 @@
       "ES2017",
       "dom"
     ],
+    "importHelpers": true,
+    "jsx": "react",
     "types": [],
     "baseUrl": ".",
     // Make the editor understand that bazel_typescript_sample refers to the workspace root.
