@@ -15,7 +15,6 @@ load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 #########################
 # JS / TS
 #########################
-# Install the nodejs "bootstrap" package
 # This provides the basic tools for running and packaging nodejs programs in Bazel
 http_archive(
     name = "build_bazel_rules_nodejs",
@@ -24,7 +23,6 @@ http_archive(
 )
 
 load("@build_bazel_rules_nodejs//:package.bzl", "rules_nodejs_dev_dependencies")
-
 rules_nodejs_dev_dependencies()
 
 # The yarn_install rule runs yarn anytime the package.json or yarn.lock file changes.
