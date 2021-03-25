@@ -9,7 +9,9 @@
         "@bazel/ibazel": "latest",
         "@bazel/typescript": "^3.2.3",
         "@types/node": "12.0.0",
-        "html-insert-assets": "^0.10.0",
+        "@types/react": "^16.9.49",
+        "@types/react-dom": "^16.9.8",
+        "html-insert-assets": "^0.14.2",
         "http-server": "^0.12.3",
         "tsickle": "^0.39.1",
         "typescript": "^3.9.7"
@@ -18,11 +20,9 @@
         "build": "bazel build //...",
         "test": "bazel test //...",
         "dev": "ibazel run //src:server_dev",
-        "prod": "ibazel run //src:server_prod"
+        "prod": "bazel run //src:server_prod"
     },
     "dependencies": {
-        "@types/react": "^16.9.49",
-        "@types/react-dom": "^16.9.8",
         "react": "^16.13.1",
         "react-dom": "^16.13.1"
     }

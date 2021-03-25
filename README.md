@@ -3,7 +3,7 @@
 This repository holds a sample frontend application using bazel, typescript, and closure compiler including:
 
 * Using a vendored dependency / extern, specifically react
-* Minified build with closure compiler, unminified build with ts_devserver
+* Minified build with closure compiler, unminified build with concatjs_devserver
 
 It does not include an example of using NPM dependencies directly in your bundle. In general,
 compiling external dependencies with Closure Compiler's advanced optimizations may not work.
@@ -15,11 +15,13 @@ See the [guide](GUIDE.md) for a step-by-step breakdown of the sample project.
 
 ## Usage
 
-Run `yarn dev` to start the devserver, access it at `http://localhost:8080/dev/index.html`
+Run `yarn dev` to start the devserver, access it at `http://localhost:8080/index.html`
 
 Run `yarn prod` to serve the compiled assets, access it at `http://localhost:8080/index.html`
 
-## Notes
+## Notes / Questions
+
+I get editor (vscode) errors about the imports but they're not consistent. They work in src/init.tsx but do not work in index.ts. The same working import copied from init.tsx to index.ts doesn't work. Renaming index.ts to index.tsx doesn't work.
 
 I initially thought that the simplest path would be to compile TS -> ES6 modules -> Closure but this was not true for some reasons:
 * There's a bug w/ es6_outputs that errors because it tries to write the externs twice
@@ -31,6 +33,12 @@ I initially thought that the simplest path would be to compile TS -> ES6 modules
 
 Some of these were patchable but it was easier to just let tsickle handle converting things to goog modules.
 
-This was created on 2020-11-24 and has not been verified to be up-to-date beyond that point.
+I had to make a manual edit to the react-dom.ext.js because the type of ReactDOM was `{?}` which made CC unhappy.
 
-Disclaimer: I don't know much about typescript, closure, or bazel. The things I've done here might not be 'good'. They might even be 'bad'.
+I manually edited vendor/tslib.js to have `goog.provide('tslib')` because the generated closure js files always look for it at that name.
+
+Not related to ts/closure but I don't know how I would handle it if I wanted different assets (minified css? minified vs unminified vendor bundle?) for the dev vs prod server. Can't have separate dev/prod targets both generate an index.html, don't know how to 'switch'.
+
+This was updated on 2021-03-25 and has not been verified to be up-to-date beyond that point.
+
+Disclaimer: I don't know much about typescript, closure, or bazel. The things I've done here might not be 'good'.

@@ -1,6 +1,6 @@
 // Typescript entry point that imports from ts and tsx files
 
-// For some reason my editor complains about these imports, although the default imports in
+// For some reason my editor complains about these imports, although the import in
 // init.tsx work fine.
 import { init } from 'bazel_typescript_closure_sample/src/init';
 import { foo } from 'bazel_typescript_closure_sample/src/lib';

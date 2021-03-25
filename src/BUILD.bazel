@@ -1,13 +1,63 @@
+load("@build_bazel_rules_nodejs//:index.bzl", "pkg_web")
 load("@io_bazel_rules_closure//closure:defs.bzl", "closure_js_binary", "closure_js_library")
 load("@npm//@bazel/typescript:index.bzl", "ts_library")
 load("@npm//@bazel/concatjs:index.bzl", "concatjs_devserver")
 load("@npm//http-server:index.bzl", "http_server")
+load("@npm//html-insert-assets:index.bzl", "html_insert_assets")
 load("@io_bazel_rules_sass//:defs.bzl", "sass_binary")
-load("index.bzl",  "index_html")
+
+###################
+# Shared Dev / Prod Targets
+###################
+
+_JS_BUNDLE_PATH = "/bundle.js"
+
+_ASSETS = [
+    ":vendor_bundle",
+    ":styles",
+]
+
+# Minified external dependencies
+# Only uses WHITESPACE optimizations
+closure_js_binary(
+    name = "vendor_bundle",
+    compilation_level = "WHITESPACE_ONLY",
+    deps = [
+        "//vendor:react.min",
+        "//vendor:react-dom.min",
+    ],
+)
+
+sass_binary(
+    name = "styles",
+    src = "styles.scss",
+)
+
+html_insert_assets(
+    name = "inject_tags",
+    outs = ["index.html"],
+    args = [
+        "--out=$@",
+        "--html=$(execpath :index_tpl.html)",
+        "--roots=$(RULEDIR)",
+        "--assets",
+    ] + ["$(execpaths %s)" % a for a in _ASSETS] + [_JS_BUNDLE_PATH],
+    data = [":index_tpl.html"] + _ASSETS,
+)
 
 ###################
 # Prod targets
 ###################
+
+# Serves production outputs
+http_server(
+  name = "server_prod",
+  data = [
+    "index.html",
+    ":bundle",
+  ] + _ASSETS,
+  args = ["src"],
+)
 
 # Minified js bundle
 closure_js_binary(
@@ -20,43 +70,10 @@ closure_js_binary(
 closure_js_library(
     name = "main_closure_lib",
     srcs = [":main_js"],
-    suppress = ["reportUnknownTypes"], # Shouldn't the externs be enough for us to know about the types?
     deps = [
-        "//externs:react",
         "//vendor:tslib", # Should probably make a wrapper that automatically includes this, since tsickle adds it to every file
+        "//externs:react",
     ],
-)
-
-# Minified external dependencies
-# Only uses WHITESPACE optimizations
-closure_js_binary(
-    name = "vendor_prod",
-    compilation_level = "WHITESPACE_ONLY",
-    deps = [
-        "//vendor:react.min",
-        "//vendor:react-dom.min",
-    ],
-)
-
-
-# Generates an index.html file from the template that injects the prod vendor/bundle scripts
-index_html(
-  name = "index_prod",
-  path = "index.html",
-  vendorPath = "./vendor_prod.js",
-  bundlePath= "./bundle.js",
-)
-
-# Serves production outputs
-http_server(
-  name = "server_prod",
-  data = [
-    ":index_prod",
-    ":bundle",
-    ":vendor_prod",
-    ":styles",
-  ],
-  args = ["src"],
 )
 
 ts_library(
@@ -68,25 +85,33 @@ ts_library(
     tsickle_typed = True,
     deps = [
         "@npm//@types/react",
-        "@npm//tsickle",
+        "@npm//@types/react-dom",
     ],
 )
 
 filegroup(
     name = "main_js",
     srcs = [":main_ts_lib"],
-    output_group = "es5_sources", # I initially thought using es6_sources here would be easier, but that turned out to not be true
+    output_group = "es5_sources", # I initially thought using es6_sources here would be easier, but didn't find that to be true
 )
 
 ###################
 # Dev targets
 ###################
 
-index_html(
-  name = "index_dev",
-  path = "dev/index.html", # It would be nice if this was just index.html but I don't know a clean way for it not to clash with the prod version
-  vendorPath = "./vendor_dev.js",
-  bundlePath= "/src/bin.js",
+concatjs_devserver(
+    name = "server_dev",
+    entry_module = "bazel_typescript_closure_sample/src/index",
+    serving_path = _JS_BUNDLE_PATH,
+    port = 8080,
+    static_files = [
+        "index.html",
+        ":vendor_bundle",
+        ":styles",
+    ],
+    deps = [
+        ":dev_ts_lib",
+    ],
 )
 
 ts_library(
@@ -99,38 +124,6 @@ ts_library(
     tsickle_typed = False,
     deps = [
         "@npm//@types/react",
+        "@npm//@types/react-dom",
     ],
-)
-
-concatjs_devserver(
-    name = "server_dev",
-    entry_module = "bazel_typescript_closure_sample/src/index",
-    serving_path = "/src/bin.js",
-    port = 8080,
-    static_files = [
-        ":index_dev",
-        "vendor_dev.js",
-        ":styles",
-    ],
-    deps = [
-        ":dev_ts_lib",
-    ],
-)
-
-closure_js_binary(
-    name = "vendor_dev",
-    compilation_level = "WHITESPACE_ONLY",
-    deps = [
-        "//vendor:react",
-        "//vendor:react-dom",
-    ],
-)
-
-###################
-# Shared targets
-###################
-
-sass_binary(
-    name = "styles",
-    src = "styles.scss",
 )

@@ -6,9 +6,13 @@
       "ES2017",
       "dom"
     ],
+    // This is to prevent errors like: 'React' refers to a UMD global, but the current file is a module.
+    // when React is used without being referenced. We do this because it's globally included in a separate vendor bundle
+    // There's some explanation in this thread, including about why jquery works, although I didn't understand it all
+    // https://github.com/microsoft/TypeScript/issues/10178
+    "allowUmdGlobalAccess": true,
     "importHelpers": true, // tsickle automatically adds the tslib import to everything, so we might as well use it
     "jsx": "react", // enable jsx syntax
-    "types": [],
     "baseUrl": ".",
     // Make the editor understand that bazel_typescript_sample refers to the workspace root.
     // Bazel will do this regardless, this is only for the editor.

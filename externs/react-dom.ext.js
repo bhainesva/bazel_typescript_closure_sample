@@ -8,7 +8,9 @@
 /**
  * The ReactDOM global object.
  *
- * @type {?}
+ * // NOTE: I changed this from {?} because closure was complaining about it
+ * // I don't know why it was {?} in the first place
+ * @type {!Object}
  * @const
  * @suppress {const|duplicate}
  */
