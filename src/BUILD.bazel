@@ -1,5 +1,6 @@
 load("@io_bazel_rules_closure//closure:defs.bzl", "closure_js_binary", "closure_js_library")
-load("@npm//@bazel/typescript:index.bzl", "ts_devserver", "ts_library")
+load("@npm//@bazel/typescript:index.bzl", "ts_library")
+load("@npm//@bazel/concatjs:index.bzl", "concatjs_devserver")
 load("@npm//http-server:index.bzl", "http_server")
 load("@io_bazel_rules_sass//:defs.bzl", "sass_binary")
 load("index.bzl",  "index_html")
@@ -101,7 +102,7 @@ ts_library(
     ],
 )
 
-ts_devserver(
+concatjs_devserver(
     name = "server_dev",
     entry_module = "bazel_typescript_closure_sample/src/index",
     serving_path = "/src/bin.js",
