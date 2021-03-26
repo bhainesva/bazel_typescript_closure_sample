@@ -22,6 +22,11 @@
       ]
     },
   },
+  // tsc gets confused by the bazel- symlinks. Doesn't affect the bazel build
+  // but breaks direct compilation w/ tsc and editor integrations. Include the
+  // subdirectory to exclude them
+  // https://github.com/bazelbuild/rules_nodejs/issues/1049
+  "include": ["src"],
   "bazelOptions": {
     // Enable Tsickle to generate closure compatable code
     "tsickleGenerateExterns": true,
