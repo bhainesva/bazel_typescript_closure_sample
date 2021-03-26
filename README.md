@@ -21,10 +21,8 @@ Run `yarn prod` to serve the compiled assets, access it at `http://localhost:808
 
 ## Notes / Questions
 
-I get editor (vscode) errors about the imports but they're not consistent. They work in src/init.tsx but do not work in index.ts. The same working import copied from init.tsx to index.ts doesn't work. Renaming index.ts to index.tsx doesn't work.
-
 I initially thought that the simplest path would be to compile TS -> ES6 modules -> Closure but this was not true for some reasons:
-* There's a bug w/ es6_outputs that errors because it tries to write the externs twice
+* I think there's a bug w/ es6_outputs that errors because it tries to write the externs twice sometimes
 * es6_sources always writes .mjs files which closure won't accept
 * The way the imports work is slightly different in typescript vs. what closure expects.
   * We'd like to use absolute imports but TS expects the project name at the beginning and closure doesn't
@@ -39,6 +37,6 @@ I manually edited vendor/tslib.js to have `goog.provide('tslib')` because the ge
 
 Not related to ts/closure but I don't know how I would handle it if I wanted different assets (minified css? minified vs unminified vendor bundle?) for the dev vs prod server. Can't have separate dev/prod targets both generate an index.html, don't know how to 'switch'.
 
-This was updated on 2021-03-25 and has not been verified to be up-to-date beyond that point.
+This was updated on 2021-03-26 and has not been verified to be up-to-date beyond that point.
 
 Disclaimer: I don't know much about typescript, closure, or bazel. The things I've done here might not be 'good'.
